@@ -1,0 +1,21 @@
+{% extends 'admin/master.html' %}
+{% block body %}
+{% if current_user.is_authenticated %}
+<p> Welcome back {{ current_user }} </p>
+{% else %}
+<header class="masthead">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 col-lg-8 mx-auto position-relative">
+                <div class="site-heading">
+                    <h1>404</h1><span class="subheading">Not Found</span></div>
+            </div>
+        </div>
+    </div>
+</header>
+{% if current_user.is_authenticated == False %}
+<script>window.location.href = "/"</script>
+{% endif %}
+{% endif %}
+{% endblock %}
