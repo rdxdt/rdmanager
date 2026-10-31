@@ -43,7 +43,7 @@ class Customer(db.Model):
     state = db.Column(db.String(2))
     postal_code = db.Column(db.String(10))
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.now)
-    terminais = db.relationship('Terminal', back_populates='Customer', lazy=True)
+    terminals = db.relationship('Terminal', back_populates='customer', lazy=True)
 
     def __repr__(self):
         return f"{self.nome}({self.razao_social})"

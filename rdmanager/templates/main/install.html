@@ -1,0 +1,28 @@
+{% extends "main.html" %}
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+      <div class="card shadow-sm">
+        <div class="card-body p-4">
+          <h1 class="h4 mb-4">Install</h1>
+          <p class="text-muted">Create the first user to finish the installation.</p>
+          <form method="POST" action="{{ url_for('main.install') }}" novalidate>
+            {{ form.hidden_tag() }}
+            {% for field in [form.name, form.lastname, form.email, form.password, form.confirm_password] %}
+            <div class="mb-3">
+              {{ field.label(class="form-label") }}
+              {{ field(class="form-control" + (" is-invalid" if field.errors else "")) }}
+              {% for error in field.errors %}
+              <div class="invalid-feedback">{{ error }}</div>
+              {% endfor %}
+            </div>
+            {% endfor %}
+            {{ form.submit(class="btn btn-primary w-100") }}
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,11 +1,45 @@
+import os
+
 from flask import Blueprint, render_template, url_for, flash, redirect, request
+from sqlalchemy import inspect
 from rdmanager import app, db, bcrypt, ip_ban
-from rdmanager.main.forms import LoginForm
+from rdmanager.main.forms import LoginForm, InstallForm
 from rdmanager.models import User, UserLogins
 from flask_login import login_user, current_user, logout_user
 
 
 main = Blueprint('main',__name__)
+
+
+def is_installed():
+    url = db.engine.url
+    if url.get_backend_name() == "sqlite":
+        # Checked on disk because connecting to SQLite would create the file
+        return os.path.exists(url.database)
+    existing_tables = set(inspect(db.engine).get_table_names())
+    return set(db.metadata.tables).issubset(existing_tables)
+
+
+@main.route("/install", methods=["GET", "POST"])
+def install():
+    if is_installed():
+        return redirect(url_for("main.home"))
+    form = InstallForm()
+    if form.validate_on_submit():
+        # Tables are only created on submit, otherwise the SQLite file created
+        # on GET would make the POST be redirected as already installed
+        db.create_all()
+        user = User(
+            name=form.name.data,
+            lastname=form.lastname.data,
+            email=form.email.data,
+            password=form.password.data,
+        )
+        db.session.add(user)
+        db.session.commit()
+        flash("Installation complete, login to continue.")
+        return redirect(url_for("main.login"))
+    return render_template("main/install.html", title="Install", form=form)
 
 @main.route('/')
 def home():

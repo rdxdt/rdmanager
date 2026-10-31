@@ -16,7 +16,7 @@ It uses bootstrap from a CDN.
 
 # Project rules
 - The bootstrap should be loaded from it's cdn
-- The project has a main.html template that serves as an outer shell, containing the header with the navigation menu and a footer and the modules content should expand it's "inside"
+- The project has a base.html template that serves as an outer shell, containing the header with the navigation menu and a footer and the modules content should expand it's "inside"
 - Every python source code should have comments in english explaining each logical block of the functions, tuples, classes and etc... and every code in python should be clean, keep it simple and idiomatic, and following the black formatter style.
 - Every html template should either load content from the bootstrap cdn or load custom css from a style.css placed in the static directory, never inline css styles in the template itself, also javascript functions should be in a js file when applicable to be reused whenever it's possible.
 - Besides the login route, and password reset related routes, every route should have the decorator @login_required
