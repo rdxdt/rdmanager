@@ -4,8 +4,8 @@ from flask import Blueprint, render_template, url_for, flash, redirect, request
 from sqlalchemy import inspect
 from rdmanager import app, db, bcrypt, ip_ban
 from rdmanager.main.forms import LoginForm, InstallForm
-from rdmanager.models import User, UserLogins
-from flask_login import login_user, current_user, logout_user
+from rdmanager.models import User, UserLogins, Customer, Terminal
+from flask_login import login_user, current_user, logout_user, login_required
 
 
 main = Blueprint('main',__name__)
@@ -42,11 +42,22 @@ def install():
     return render_template("main/install.html", title="Install", form=form)
 
 @main.route('/')
+@login_required
 def home():
-    if not current_user.is_authenticated:
-        return redirect(url_for('main.login'))
-    else:
-        return redirect('/admin')
+    # The newest record is the current session, so skip it to show the previous login
+    last_login = (
+        UserLogins.query.filter_by(user_id=current_user.id)
+        .order_by(UserLogins.login_date.desc())
+        .offset(1)
+        .first()
+    )
+    return render_template(
+        "main/home.html",
+        title="Home",
+        last_login=last_login,
+        customer_count=Customer.query.count(),
+        terminal_count=Terminal.query.count(),
+    )
 
 @main.route('/login',methods=['GET','POST'])
 def login():
