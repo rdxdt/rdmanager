@@ -10,8 +10,8 @@ It uses bootstrap from a CDN.
 - `rdmanager/static`: Static files such as css files(`css` subdirectory), image files(`img` subdirectory) and js files(`js` subdirectory).
 - `rdmanager/errors`: Special module for error handling.
 - `rdmanager/main`: Module for handling the login, logout, password recovery, and home page.
-- `rdmanager/users`: Module for handling the user credentials.
-- `rdmanager/clients`: Module for handling the creation of clients and it's terminals.
+- `rdmanager/user`: Module for handling the user credentials.
+- `rdmanager/customer`: Module for handling the creation of clients and it's terminals.
 - `templates`: Directory containing the templates in subdirectories for each module. 
 
 # Project rules
