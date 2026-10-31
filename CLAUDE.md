@@ -20,6 +20,10 @@ It uses bootstrap from a CDN.
 - Every python source code should have comments in english explaining each logical block of the functions, tuples, classes and etc... and every code in python should be clean, keep it simple and idiomatic, and following the black formatter style.
 - Every html template should either load content from the bootstrap cdn or load custom css from a style.css placed in the static directory, never inline css styles in the template itself, also javascript functions should be in a js file when applicable to be reused whenever it's possible.
 - Besides the login route, and password reset related routes, every route should have the decorator @login_required
+- Each module implements a blueprint
+- Try to use WTForms as much as possible in the module forms.py
+- Place the routes in routes.py
+- Every SQLAlchemy model should be placed in the `rdmanager/models.py`
 
 # Editing Hygiene
 - Change only what is required.
