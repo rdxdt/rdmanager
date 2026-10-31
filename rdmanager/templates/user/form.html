@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="auth-card">
+  <div class="card">
+    <div class="card-body p-4">
+      {% if user %}
+      <h1 class="h4 mb-2"><i class="bi bi-pencil text-accent"></i> Edit user</h1>
+      <p class="text-secondary">Update the details of {{ user.name }} {{ user.lastname }}.</p>
+      {% else %}
+      <h1 class="h4 mb-2"><i class="bi bi-person-plus text-accent"></i> New user</h1>
+      <p class="text-secondary">Fill in the details of the new user.</p>
+      {% endif %}
+      <form method="POST" novalidate>
+        {{ form.hidden_tag() }}
+        {% for field in [form.name, form.lastname, form.email, form.password, form.confirm_password] %}
+        <div class="mb-3">
+          {{ field.label(class="form-label") }}
+          {{ field(class="form-control" + (" is-invalid" if field.errors else "")) }}
+          {% for error in field.errors %}
+          <div class="invalid-feedback">{{ error }}</div>
+          {% endfor %}
+          {% if field.description %}
+          <div class="form-text">{{ field.description }}</div>
+          {% endif %}
+        </div>
+        {% endfor %}
+        <div class="d-flex gap-2">
+          <a class="btn btn-outline-secondary w-100"
+            href="{{ url_for('users.user_detail', user_id=user.id) if user else url_for('users.list_users') }}">Cancel</a>
+          {{ form.submit(class="btn btn-primary w-100") }}
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

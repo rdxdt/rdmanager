@@ -185,3 +185,29 @@ body.auth-page {
   font-weight: 700;
   line-height: 1;
 }
+
+/* Tables and pagination */
+.card .table {
+  --bs-table-bg: transparent;
+  --bs-table-hover-bg: rgba(34, 211, 238, 0.08);
+  --bs-table-hover-color: var(--rd-text);
+}
+
+.clickable-row {
+  cursor: pointer;
+}
+
+.pagination {
+  --bs-pagination-bg: var(--rd-surface);
+  --bs-pagination-border-color: var(--rd-border);
+  --bs-pagination-active-bg: var(--rd-accent);
+  --bs-pagination-active-border-color: var(--rd-accent);
+  --bs-pagination-active-color: var(--rd-surface);
+}
+
+/* Modals */
+.modal-content {
+  background-color: var(--rd-card);
+  border: 1px solid var(--rd-border);
+  border-radius: var(--rd-radius);
+}

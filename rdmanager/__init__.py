@@ -25,7 +25,9 @@ loginMgr.login_message = 'Login to continue'
 
 from rdmanager.errors.handlers import errors
 from rdmanager.main.routes import main
+from rdmanager.user.routes import users
 
 
 app.register_blueprint(main)
+app.register_blueprint(users)
 app.register_blueprint(errors)

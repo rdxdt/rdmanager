@@ -1,0 +1,18 @@
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <form class="modal-content" method="POST">
+      {{ delete_form.hidden_tag() }}
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="deleteModalLabel"><i class="bi bi-exclamation-triangle text-danger"></i> Confirm removal</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to remove <strong data-delete-name></strong>? This action can't be undone.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+        {{ delete_form.submit(class="btn btn-danger") }}
+      </div>
+    </form>
+  </div>
+</div>

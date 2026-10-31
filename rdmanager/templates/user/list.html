@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-4">
+  <h1 class="h3 mb-0"><i class="bi bi-people text-accent"></i> Users</h1>
+  <a class="btn btn-primary" href="{{ url_for('users.new_user') }}"><i class="bi bi-person-plus"></i> New user</a>
+</div>
+
+<div class="card overflow-hidden">
+  <div class="table-responsive">
+    <table class="table table-hover align-middle mb-0">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Last name</th>
+          <th>E-mail</th>
+          <th class="text-end">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user in users %}
+        <tr class="clickable-row" data-href="{{ url_for('users.user_detail', user_id=user.id) }}">
+          <td>{{ user.name }}</td>
+          <td>{{ user.lastname }}</td>
+          <td>{{ user.email }}</td>
+          <td class="text-end text-nowrap">
+            <a class="btn btn-sm btn-outline-secondary" href="{{ url_for('users.edit_user', user_id=user.id) }}"
+              title="Edit"><i class="bi bi-pencil"></i></a>
+            {% if user.id != current_user.id %}
+            <button type="button" class="btn btn-sm btn-outline-danger" title="Remove"
+              data-bs-toggle="modal" data-bs-target="#deleteModal"
+              data-delete-url="{{ url_for('users.delete_user', user_id=user.id) }}"
+              data-delete-name="{{ user.name }} {{ user.lastname }}"><i class="bi bi-trash"></i></button>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% include "delete_modal.html" %}
+{% endblock %}

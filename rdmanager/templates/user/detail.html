@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-4">
+  <h1 class="h3 mb-0"><i class="bi bi-person text-accent"></i> {{ user.name }} {{ user.lastname }}</h1>
+  <div class="d-flex gap-2">
+    <a class="btn btn-outline-secondary" href="{{ url_for('users.list_users') }}"><i class="bi bi-arrow-left"></i> Back</a>
+    <a class="btn btn-primary" href="{{ url_for('users.edit_user', user_id=user.id) }}"><i class="bi bi-pencil"></i> Edit</a>
+    {% if user.id != current_user.id %}
+    <button type="button" class="btn btn-danger"
+      data-bs-toggle="modal" data-bs-target="#deleteModal"
+      data-delete-url="{{ url_for('users.delete_user', user_id=user.id) }}"
+      data-delete-name="{{ user.name }} {{ user.lastname }}"><i class="bi bi-trash"></i> Remove</button>
+    {% endif %}
+  </div>
+</div>
+
+<div class="row g-4">
+  <div class="col-lg-4">
+    <div class="card h-100">
+      <div class="card-body p-4">
+        <h2 class="h5 mb-3">Details</h2>
+        <dl class="mb-0">
+          <dt class="text-secondary fw-normal">Name</dt>
+          <dd>{{ user.name }}</dd>
+          <dt class="text-secondary fw-normal">Last name</dt>
+          <dd>{{ user.lastname }}</dd>
+          <dt class="text-secondary fw-normal">E-mail</dt>
+          <dd>{{ user.email }}</dd>
+          <dt class="text-secondary fw-normal">Created on</dt>
+          <dd class="mb-0">{{ user.date_created.strftime('%d/%m/%Y at %H:%M') }}</dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-8">
+    <div class="card h-100">
+      <div class="card-body p-4">
+        <h2 class="h5 mb-3">Login history <span class="text-secondary fs-6">({{ logins.total }})</span></h2>
+        {% if logins.items %}
+        <div class="table-responsive">
+          <table class="table align-middle">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>IP address</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for login in logins.items %}
+              <tr>
+                <td>{{ login.login_date.strftime('%d/%m/%Y %H:%M:%S') }}</td>
+                <td>{{ login.login_ip or '-' }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% if logins.pages > 1 %}
+        <nav aria-label="Login history pages">
+          <ul class="pagination justify-content-center mb-0">
+            <li class="page-item {% if not logins.has_prev %}disabled{% endif %}">
+              <a class="page-link" href="{{ url_for('users.user_detail', user_id=user.id, page=logins.prev_num) }}"
+                aria-label="Previous">&laquo;</a>
+            </li>
+            {% for page in logins.iter_pages() %}
+            {% if page %}
+            <li class="page-item {% if page == logins.page %}active{% endif %}">
+              <a class="page-link" href="{{ url_for('users.user_detail', user_id=user.id, page=page) }}">{{ page }}</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled"><span class="page-link">&hellip;</span></li>
+            {% endif %}
+            {% endfor %}
+            <li class="page-item {% if not logins.has_next %}disabled{% endif %}">
+              <a class="page-link" href="{{ url_for('users.user_detail', user_id=user.id, page=logins.next_num) }}"
+                aria-label="Next">&raquo;</a>
+            </li>
+          </ul>
+        </nav>
+        {% endif %}
+        {% else %}
+        <p class="text-secondary mb-0">No logins recorded.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% include "delete_modal.html" %}
+{% endblock %}
