@@ -40,7 +40,7 @@
               {{ form.Remember(class="form-check-input") }}
               {{ form.Remember.label(class="form-check-label") }}
             </div>
-            <a href="#" class="small">Forgot password?</a>
+            <a href="{{ url_for('main.reset_request') }}" class="small">Forgot password?</a>
           </div>
           {% if config.HCAPTCHA_ENABLED %}
           <div class="d-flex justify-content-center mb-3">
