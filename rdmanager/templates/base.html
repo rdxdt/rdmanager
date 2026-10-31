@@ -31,7 +31,8 @@
                 href="{{ url_for('users.list_users') }}"><i class="bi bi-people"></i> Users</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#"><i class="bi bi-building"></i> Customers</a>
+              <a class="nav-link {% if request.blueprint == 'customers' %}active{% endif %}"
+                href="{{ url_for('customers.list_customers') }}"><i class="bi bi-building"></i> Customers</a>
             </li>
           </ul>
           <ul class="navbar-nav">

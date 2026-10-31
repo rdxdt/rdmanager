@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="auth-card">
+  <div class="card">
+    <div class="card-body p-4">
+      {% if terminal %}
+      <h1 class="h4 mb-2"><i class="bi bi-pencil text-accent"></i> Edit terminal</h1>
+      {% else %}
+      <h1 class="h4 mb-2"><i class="bi bi-pc-display text-accent"></i> New terminal</h1>
+      {% endif %}
+      <p class="text-secondary">Terminal of {{ customer.name }}.</p>
+      <form method="POST" novalidate>
+        {{ form.hidden_tag() }}
+        {% for field in [form.description, form.rustdesk_id, form.rustdesk_password] %}
+        <div class="mb-3">
+          {{ field.label(class="form-label") }}
+          {{ field(class="form-control" + (" is-invalid" if field.errors else "")) }}
+          {% for error in field.errors %}
+          <div class="invalid-feedback">{{ error }}</div>
+          {% endfor %}
+        </div>
+        {% endfor %}
+        <div class="d-flex gap-2">
+          <a class="btn btn-outline-secondary w-100"
+            href="{{ url_for('customers.customer_detail', customer_id=customer.id) }}">Cancel</a>
+          {{ form.submit(class="btn btn-primary w-100") }}
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

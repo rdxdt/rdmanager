@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-4">
+  <h1 class="h3 mb-0"><i class="bi bi-building text-accent"></i> Customers</h1>
+  <a class="btn btn-primary" href="{{ url_for('customers.new_customer') }}"><i class="bi bi-plus-lg"></i> New customer</a>
+</div>
+
+<div class="card overflow-hidden">
+  {% if customers %}
+  <div class="table-responsive">
+    <table class="table table-hover align-middle mb-0">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>E-mail</th>
+          <th>Phone</th>
+          <th class="text-end">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for customer in customers %}
+        <tr class="clickable-row" data-href="{{ url_for('customers.customer_detail', customer_id=customer.id) }}">
+          <td>{{ customer.name }}</td>
+          <td>{{ customer.email or '-' }}</td>
+          <td>{{ customer.phone or '-' }}</td>
+          <td class="text-end text-nowrap">
+            <a class="btn btn-sm btn-outline-secondary" href="{{ url_for('customers.edit_customer', customer_id=customer.id) }}"
+              title="Edit"><i class="bi bi-pencil"></i></a>
+            <button type="button" class="btn btn-sm btn-outline-danger" title="Remove"
+              data-bs-toggle="modal" data-bs-target="#deleteModal"
+              data-delete-url="{{ url_for('customers.delete_customer', customer_id=customer.id) }}"
+              data-delete-name="{{ customer.name }}"><i class="bi bi-trash"></i></button>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="card-body p-4">
+    <p class="text-secondary mb-0">No customers registered.</p>
+  </div>
+  {% endif %}
+</div>
+
+{% include "delete_modal.html" %}
+{% endblock %}

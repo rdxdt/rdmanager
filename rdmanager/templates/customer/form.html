@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% macro render_field(field, col_class) %}
+<div class="{{ col_class }}">
+  {{ field.label(class="form-label") }}
+  {{ field(class="form-control" + (" is-invalid" if field.errors else "")) }}
+  {% for error in field.errors %}
+  <div class="invalid-feedback">{{ error }}</div>
+  {% endfor %}
+</div>
+{% endmacro %}
+{% block content %}
+<div class="form-card">
+  <div class="card">
+    <div class="card-body p-4">
+      {% if customer %}
+      <h1 class="h4 mb-2"><i class="bi bi-pencil text-accent"></i> Edit customer</h1>
+      <p class="text-secondary">Update the details of {{ customer.name }}.</p>
+      {% else %}
+      <h1 class="h4 mb-2"><i class="bi bi-building-add text-accent"></i> New customer</h1>
+      <p class="text-secondary">Fill in the details of the new customer.</p>
+      {% endif %}
+      <form method="POST" novalidate>
+        {{ form.hidden_tag() }}
+        <div class="row g-3 mb-4">
+          {{ render_field(form.name, "col-12") }}
+          {{ render_field(form.email, "col-md-7") }}
+          {{ render_field(form.phone, "col-md-5") }}
+          {{ render_field(form.address, "col-md-9") }}
+          {{ render_field(form.number, "col-md-3") }}
+          {{ render_field(form.complement, "col-md-6") }}
+          {{ render_field(form.postal_code, "col-md-6") }}
+          {{ render_field(form.city, "col-md-9") }}
+          {{ render_field(form.state, "col-md-3") }}
+        </div>
+        <div class="d-flex gap-2">
+          <a class="btn btn-outline-secondary w-100"
+            href="{{ url_for('customers.customer_detail', customer_id=customer.id) if customer else url_for('customers.list_customers') }}">Cancel</a>
+          {{ form.submit(class="btn btn-primary w-100") }}
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

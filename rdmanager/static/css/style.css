@@ -211,3 +211,10 @@ body.auth-page {
   border: 1px solid var(--rd-border);
   border-radius: var(--rd-radius);
 }
+
+/* Wider standalone forms (customer) */
+.form-card {
+  width: 100%;
+  max-width: 48rem;
+  margin: auto;
+}

@@ -15,3 +15,17 @@ if (deleteModal) {
     deleteModal.querySelector("[data-delete-name]").textContent = trigger.dataset.deleteName;
   });
 }
+
+// Buttons with a data-copy send its value to the clipboard and briefly show a check icon
+document.querySelectorAll("[data-copy]").forEach((button) => {
+  button.addEventListener("click", async () => {
+    const icon = button.querySelector("i");
+    try {
+      await navigator.clipboard.writeText(button.dataset.copy);
+      icon.className = "bi bi-clipboard-check text-success";
+    } catch {
+      icon.className = "bi bi-clipboard-x text-danger";
+    }
+    setTimeout(() => (icon.className = "bi bi-clipboard"), 1500);
+  });
+});
