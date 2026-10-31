@@ -29,3 +29,4 @@ class Config:
 
     HCAPTCHA_SITE_KEY = os.getenv("HCAPTCHA_SITE_KEY")
     HCAPTCHA_SECRET_KEY = os.getenv("HCAPTCHA_SECRET_KEY")
+    HCAPTCHA_ENABLED = not DEBUG

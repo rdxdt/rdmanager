@@ -2,7 +2,7 @@ import os
 
 from flask import Blueprint, render_template, url_for, flash, redirect, request
 from sqlalchemy import inspect
-from rdmanager import app, db, bcrypt, ip_ban
+from rdmanager import app, db, bcrypt, ip_ban, hcaptcha
 from rdmanager.main.forms import LoginForm, InstallForm
 from rdmanager.models import User, UserLogins, Customer, Terminal
 from flask_login import login_user, current_user, logout_user, login_required
@@ -62,22 +62,23 @@ def home():
 @main.route('/login',methods=['GET','POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect('/admin') 
+        return redirect(url_for('main.home'))
     ip_ban.add(ip=request.remote_addr,url=url_for('main.login'))
     logform = LoginForm()
     if logform.validate_on_submit():
         user = User.query.filter_by(email=logform.Email.data).first()
-        print(user)
-        if user and bcrypt.check_password_hash(user.password_hash, logform.Password.data):
-            login_user(user, remember=logform.remember.data)
+        if not hcaptcha.verify():
+            flash("Captcha verification failed, please try again.")
+        elif user and bcrypt.check_password_hash(user.password_hash, logform.Password.data):
+            login_user(user, remember=logform.Remember.data)
             loginrec = UserLogins(user_id= user.id, login_ip= request.remote_addr)
             db.session.add(loginrec)
             db.session.commit()
             next_page = request.args.get('next')
             return redirect(next_page) if next_page else redirect(url_for('main.home'))
         else:
-            flash(f'Não foi possível efetuar login com esse e-mail e senha.')    
-    return render_template('login.html',title='Login',form=logform) 
+            flash(f'Login failed, check the username and password and try again.')    
+    return render_template('main/login.html',title='Login',form=logform)
 
 @main.route('/logout')
 def logout():

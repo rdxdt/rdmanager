@@ -4,6 +4,7 @@ from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from flask_ipban import IpBan
 from flask_mail import Mail
+from flask_hcaptcha import hCaptcha
 from rdmanager.config import Config
 from werkzeug.middleware.proxy_fix import ProxyFix
 
@@ -14,6 +15,7 @@ ip_ban.init_app(app)
 bcrypt = Bcrypt(app)
 db = SQLAlchemy(app)
 mail = Mail(app)
+hcaptcha = hCaptcha(app)
 app.wsgi_app = ProxyFix(app.wsgi_app,x_for=1,x_host=1)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
