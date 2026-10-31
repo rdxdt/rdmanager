@@ -86,3 +86,26 @@ class ResetPasswordForm(FlaskForm):
         validators=[EqualTo("password", message="Passwords must match")],
     )
     submit = SubmitField("Change password")
+
+
+class ChangePasswordForm(FlaskForm):
+    current_password = PasswordField(
+        "Current password",
+        validators=[DataRequired(message="Current password field is mandatory")],
+    )
+    password = PasswordField(
+        "New password",
+        validators=[
+            DataRequired(message="Password field is mandatory"),
+            Length(
+                min=8,
+                max=30,
+                message="Password must be between 8 to 30 characters long",
+            ),
+        ],
+    )
+    confirm_password = PasswordField(
+        "Confirm new password",
+        validators=[EqualTo("password", message="Passwords must match")],
+    )
+    submit = SubmitField("Change password")

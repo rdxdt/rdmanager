@@ -9,6 +9,7 @@ from rdmanager.main.forms import (
     ResetRequestForm,
     ResetCodeForm,
     ResetPasswordForm,
+    ChangePasswordForm,
 )
 from rdmanager.main.utils import send_reset_email, verify_reset_code
 from rdmanager.models import User, UserLogins, Customer, Terminal
@@ -91,6 +92,20 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('main.home'))
+
+
+@main.route("/change_password", methods=["GET", "POST"])
+@login_required
+def change_password():
+    form = ChangePasswordForm()
+    if form.validate_on_submit():
+        if bcrypt.check_password_hash(current_user.password_hash, form.current_password.data):
+            current_user.password = form.password.data
+            db.session.commit()
+            flash("Your password has been changed.", "success")
+            return redirect(url_for("main.home"))
+        form.current_password.errors.append("Current password is incorrect")
+    return render_template("main/change_password.html", title="Change password", form=form)
 
 
 @main.route("/reset_password", methods=["GET", "POST"])
